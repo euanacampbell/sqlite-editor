@@ -2,6 +2,8 @@ import sqlite3
 from sqlite3 import Error
 from tabulate import tabulate
 import json
+import os
+
 
 class SQL:
 
@@ -11,7 +13,8 @@ class SQL:
     def create_connection(self):
         """ create a database connection to a SQLite database """
         try:
-            conn = sqlite3.connect("/Users/euancampbell/Google Drive/Projects/sqlite-editor/assets/main.db")
+            cwd = os.getcwd()
+            conn = sqlite3.connect(f"{cwd}/assets/main.db")
             # print(sqlite3.version)
         except sqlite3.Error as e:
             print(e)
