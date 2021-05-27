@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 from sql import SQL
 import json
+import time
 
 
 app = Flask(__name__)
@@ -26,18 +27,10 @@ def home():
 
 @app.route('/interview/<name>')
 def interview(name):
-    users = ['Euan', 'Luis', 'Tanzila']
-    lookup = {
-        'Euan': 'dev setup for Euan',
-        'Luis': 'dev setup for Luis',
-        'Tanzila': 'Interview with Tanzila Syeda',
-    }
     name = name.capitalize()
-    if name in users:
-        welcome = lookup[name]
-        return render_template('interview.html', welcome=welcome)
-    else:
-        pass
+
+    return render_template('interview.html', name=name)
+
         
 
 @app.route('/query', methods=['GET', 'POST'])

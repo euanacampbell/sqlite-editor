@@ -181,4 +181,10 @@ html, body {
     font-weight: bold;
   }
 
+#results td 
+{
+    text-align: center; 
+    vertical-align: middle;
+}
+
     }
