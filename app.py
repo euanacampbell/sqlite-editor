@@ -38,7 +38,7 @@ def query():
 
     response = request.args.getlist('query')[0]
 
-    response = sql.run_query(response, sql_print=True)
+    response = sql.run_query(response)
 
     if response['error']:
         result = response['result']
