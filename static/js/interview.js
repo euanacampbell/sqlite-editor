@@ -7,6 +7,7 @@ $(document).ready(function(){
     console.log('refreshing tables');
 
     $.get("/refresh");
+    document.getElementById("dataresetalert").style.visibility = "visible";
   });
 
   $("button#run").click(function(){
@@ -26,12 +27,16 @@ $(document).ready(function(){
         document.getElementById("error-message").innerHTML = response;
       } else {
         document.getElementById("error-message").innerHTML = null;
+        document.getElementById("dataresetalert").style.visibility = "hidden";
 
         var table = document.getElementById("results");
 
+        // delete any existing table
         while(table.rows.length > 0) {
           table.deleteRow(0);
         }
+
+        // build new table
         for (var key in response) {
           if (response.hasOwnProperty(key)) {
               var row = table.insertRow(-1);
@@ -54,15 +59,3 @@ $(document).ready(function(){
     });
   });
 });
-
-
-function myFunction() {
-  // Get the snackbar DIV
-  var x = document.getElementById("snackbar");
-
-  // Add the "show" class to DIV
-  x.className = "show";
-
-  // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-}
