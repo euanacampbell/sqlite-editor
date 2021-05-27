@@ -10,6 +10,9 @@ $(document).ready(function(){
 
   $("button#run").click(function(){
     var query = $('textarea#query').val();
+    
+    var x = document.getElementById("run");
+    x.innerHTML = "running...";
 
     console.log(query);
 
@@ -22,6 +25,7 @@ $(document).ready(function(){
 
       console.log(response);
       console.log(xhr.status);
+      x.innerHTML = "execute";
 
       if(xhr.status!=200)
       {
