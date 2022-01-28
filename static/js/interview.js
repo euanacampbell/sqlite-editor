@@ -20,7 +20,7 @@ $(document).ready(function(){
     data['query'] = query;
 
     $.get("/query", data).done(function (response, statusText, xhr) {
-      x.innerHTML = "execute";
+      x.innerHTML = "RUN";
 
       if(xhr.status!=200)
       {
