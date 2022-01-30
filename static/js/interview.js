@@ -7,11 +7,17 @@ $(document).ready(function(){
     console.log('refreshing tables');
 
     $.get("/refresh");
-    document.getElementById("dataresetalert").style.visibility = "visible";
+    window.location.reload();
+    // document.getElementById("dataresetalert").style.visibility = "visible";
   });
 
   $("button#run").click(function(){
-    var query = $('textarea#query').val();
+    // var query = $('textarea#query').val();
+
+    var query = window.editor.getValue().val()
+
+    console.log('query')
+    console.log(query)
     
     var x = document.getElementById("run");
     x.innerHTML = "running...";
@@ -20,7 +26,7 @@ $(document).ready(function(){
     data['query'] = query;
 
     $.get("/query", data).done(function (response, statusText, xhr) {
-      x.innerHTML = "RUN";
+      x.innerHTML = "Execute";
 
       if(xhr.status!=200)
       {
