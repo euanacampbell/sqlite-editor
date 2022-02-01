@@ -9,29 +9,32 @@ app = Flask(__name__)
 sql = SQL()
 sql.refresh_tables()
 
+
 def convert_to_json(results):
     master = {}
     counter = 1
-    
+
     for row in results:
         print(row)
-        master[counter]=row
-        counter+=1
-    
+        master[counter] = row
+        counter += 1
+
     print(master)
     return(master)
+
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/interview/<name>')
-def interview(name):
-    name = name.capitalize()
 
-    return render_template('interview.html', name=name)
+@app.route('/interview')
+def interview():
+    code = request.args.get("code")
+    code = code.capitalize()
 
-        
+    return render_template('interview.html', code=code)
+
 
 @app.route('/query', methods=['GET', 'POST'])
 def query():
@@ -47,6 +50,7 @@ def query():
         result = convert_to_json(response['result'])
         return(result)
 
+
 @app.route('/refresh')
 def refresh():
     sql.refresh_tables()
@@ -60,10 +64,12 @@ def trigger_error():
 
     return(division_by_zero)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
 
     return redirect(url_for('home'))
+
 
 # start the server with the 'run()' method
 if __name__ == '__main__':

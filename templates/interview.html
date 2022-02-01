@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+<!-- saved from url=(0016)http://localhost -->
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SQLite - Trade Data</title>
+    <title>SQL - {{ code|upper }}</title>
     <link rel="icon" href="/static/img/sql_logo.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -18,14 +19,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
 
+    <link rel=stylesheet href="/static/css/docs.css">
+
+    <link rel="stylesheet" href="/static/css/codemirror.css" />
+    <script src="/static/js/codemirror.js"></script>
+    <script src="/static/js/matchbrackets.js"></script>
+    <script src="/static/js/sql.js"></script>
+    <link rel="stylesheet" href="/static/css/show-hint.css" />
+    <script src="/static/js/show-hint.js"></script>
+    <script src="/static/js/sql-hint.js"></script>
+
     <style>
       td {
         font-family: 'Courier New', monospace;
+        font-size: small;
       }
+      .CodeMirror {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
 </style>
   </head>
-  <body>
+  <body style="background: #F6F8F9;">
     <div class="container">
+
+  
       <div class="container">
         <!-- <h1>SQLite - Trade Data</h1> -->
 
@@ -46,29 +64,30 @@
         <hr/>
         <div class="container" style="margin-top: 10px">
           <div class="row">
-            <div class="col-sm-12 col-md-6" style="margin-top: 5px;">
-              <h5 style="font-family: 'Comfortaa', cursive;">Query</h5>
+            <div class="col-sm-12 col-md-5">
+              <div class="btn-block mb-3"><!-- style="float: right;"-->
+                <button type='button' id='run' class='btn btn-success' style="font-family: 'Comfortaa', cursive;">Execute</button>
+                <button type='button' id='refresh' class="btn btn-danger" style="font-family: 'Comfortaa', cursive;">Reset</button>
+              </div>
               <div class="item">
-                <textarea placeholder="SELECT * FROM Trade" style="min-width: 100%; font-family: 'Courier New', monospace;" spellcheck="false" rows="10" class="query" id='query'></textarea>
+                <form>
+                <textarea id="query" name="code" placeholder="SELECT * FROM Trade">
+                </textarea>
+                </form>
+                <!-- <textarea placeholder="SELECT * FROM Trade" style="min-width: 100%; font-family: 'Courier New', monospace;" spellcheck="false" rows="10" class="query" id='query'></textarea> -->
               </div>
               <p id='error-message' style="color:red"></p>
-              <div class="btn-block">
-                <button type='button' id='run' class='btn btn-success' style="font-family: 'Comfortaa', cursive;">RUN</button>
-                <button type='button' id='refresh' class="btn btn-danger" style="font-family: 'Comfortaa', cursive;">RESET</button>
-              </div>
+              
             </div>
-            <div class="col-sm-12 col-md-6" style="margin-top: 5px;">
+            <div class="col-sm-12 col-md-7" style="margin-top: 5px;">
               <h5 style="font-family: 'Comfortaa', cursive;">Results</h>
               <div class="results">
-                <table style="width:100%" id='results' class="table table-bordered">
+                <table style="width:100%; background-color: white;" id='results' class="table table-bordered">
                 </table>
               </div>
             </div>
           </div>
         </div>
-        
-        
-        
         
 
     </div>

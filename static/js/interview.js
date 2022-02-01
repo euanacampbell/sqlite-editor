@@ -1,17 +1,41 @@
 
 
 
-$(document).ready(function(){
+$(document).ready(function () {
+  
+  var mime = 'text/x-mariadb';
+  // get mime type
+  if (window.location.href.indexOf('mime=') > -1) {
+    mime = window.location.href.substr(window.location.href.indexOf('mime=') + 5);
+  }
+  window.editor = CodeMirror.fromTextArea(document.getElementById('query'), {
+    mode: mime,
+    indentWithTabs: true,
+    lineNumbers: true,
+    matchBrackets : true,
+    autofocus: true,
+    extraKeys: {"Ctrl-Space": "autocomplete"},
+    hintOptions: {tables: {
+      users: ["name", "score", "birthDate"],
+      countries: ["name", "population", "size"]
+    }}
+  });
 
   $("button#refresh").click(function(){
     console.log('refreshing tables');
 
     $.get("/refresh");
-    document.getElementById("dataresetalert").style.visibility = "visible";
+    window.location.reload();
+    // document.getElementById("dataresetalert").style.visibility = "visible";
   });
 
   $("button#run").click(function(){
-    var query = $('textarea#query').val();
+    // var query = $('textarea#query').val();
+
+    var query = window.editor.getValue()
+
+    console.log('query')
+    console.log(query)
     
     var x = document.getElementById("run");
     x.innerHTML = "running...";
@@ -20,7 +44,7 @@ $(document).ready(function(){
     data['query'] = query;
 
     $.get("/query", data).done(function (response, statusText, xhr) {
-      x.innerHTML = "RUN";
+      x.innerHTML = "Execute";
 
       if(xhr.status!=200)
       {
