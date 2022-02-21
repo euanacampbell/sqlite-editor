@@ -41,7 +41,9 @@ def interview(sql_type):
     code = code.capitalize()
 
     db_creation_script = sqlparse.format(
-        sql.get_table_script(), reindent=True, keyword_case='upper')
+        sql.get_table_script(), reindent=False, keyword_case='upper')
+
+    print(db_creation_script)
 
     return render_template('interview.html', code=code, questions=questions, sql_type=sql_type, tables=sql.get_table_info(), creation_script=db_creation_script)
 

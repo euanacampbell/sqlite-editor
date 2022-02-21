@@ -1,6 +1,6 @@
 INVESTMENT_QUESTIONS = {
     'Q1': {
-        'question': 'Find all trades for the investor C00003',
+        'question': 'Find all trades for investor C00003',
         'query': """SELECT i.id,
 	   i.fullname,
 	   t.shares,

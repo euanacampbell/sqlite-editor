@@ -40,7 +40,7 @@ $(document).ready(function () {
     }}
     
   });
-  window.editor.getDoc().setValue('')
+  window.editor.getDoc().setValue('SELECT * FROM Trade')
 
   $("button#refresh").click(function(){
 

@@ -45,24 +45,54 @@
 
   
       <div class="container">
-        <!-- <h1>SQLite - Trade Data</h1> -->
 
         <div class="row">
-          <!-- <div class="p-3 col-sm-12 col-md-2">
-            <h5 style="font-family: 'Comfortaa', cursive;">Schema</h>
-            <div class="border border-secondary rounded">
-              <img src="/static/img/tables.png" alt="sqlite tables" width="100%">
-            </div>
-            
-          </div> -->
           <div class="p-3 col-sm-12 col-md-12">
-            <h5 style="font-family: 'Comfortaa', cursive;">Using SQL, create the following outputs</h>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#schemaModal">
-                View Tables
-              </button>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sqlModal">
+            <h5 style="font-family: 'Comfortaa', cursive;">Using SQL, create the following outputs</h5>
+              <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sqlModal">
                 View DB Creation
-              </button>
+              </button> -->
+            <!-- Accordio -->
+            <div class="accordion mb-5" id="accordionTable">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Tables
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTable">
+                  <div class="accordion-body">
+                    {% for table in tables %}
+                    <h5>{{table}}</h5>
+                    <table style="width:100%; background-color: white;" id='table_{{table}}' class="table table-bordered">
+                      <tbody>
+                        {% for row in tables[table] %}
+                        <tr {% if loop.index==1 %}style="font-weight:bold"{% endif %}>
+                          {% for cell in row %}
+                          <td>{{cell}}</td>
+                          {% endfor %}
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                    SQL Structure
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionTable">
+                  <div class="accordion-body">
+                    <textarea style="width: 100%; font-family: 'Courier New', monospace;" rows="80">{{creation_script}}</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="accordion" id="accordionExample">
               {% for question in questions %}
               <div class="accordion-item">
@@ -116,56 +146,6 @@
         
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="schemaModal" tabindex="-1" aria-labelledby="schemaModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" style="width: 70%;">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <h5 class="modal-title" id="schemaModalLabel">Schema</h5> -->
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            {% for table in tables %}
-            <h5>{{table}}</h5>
-            <table style="width:100%; background-color: white;" id='table_{{table}}' class="table table-bordered">
-              <tbody>
-                {% for row in tables[table] %}
-                <tr {% if loop.index==1 %}style="font-weight:bold"{% endif %}>
-                  {% for cell in row %}
-                  <td>{{cell}}</td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            {% endfor %}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End of Modal -->
-    <!-- Modal -->
-    <div class="modal fade" id="sqlModal" tabindex="-1" aria-labelledby="sqlModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" style="width: 70%;">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="sqlModalLabel">Database Construction</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p></p>
-            <textarea style="width: 100%; font-family: 'Courier New', monospace;" rows="100">{{creation_script}}</textarea>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End of Modal -->
     <div hidden id="dataresetalert" class="alert alert-warning" role="alert">
       data has been reset
     </div>

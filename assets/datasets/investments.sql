@@ -3,36 +3,34 @@ DROP TABLE IF EXISTS Investment;
 DROP TABLE IF EXISTS Trade;
 DROP TABLE IF EXISTS Firm;
 
-
 CREATE TABLE [Contact](
-                    [Id] [nvarchar](50) NOT NULL PRIMARY KEY,
-                    [FullName] [nvarchar] (50) NOT NULL,
-                    [ContactType] [nvarchar] (50) NOT NULL
-                    );
+[Id] [nvarchar](50) NOT NULL PRIMARY KEY,
+[FullName] [nvarchar] (50) NOT NULL,
+[ContactType] [nvarchar] (50) NOT NULL
+);
 
 CREATE TABLE [Firm](
-                    [Id] [nvarchar](50) NOT NULL PRIMARY KEY,
-                    [FirmName] [nvarchar] (50) NOT NULL
-                    );
+[Id] [nvarchar](50) NOT NULL PRIMARY KEY,
+[FirmName] [nvarchar] (50) NOT NULL
+);
 
 CREATE TABLE [Investment](
-                    [Id] varchar(3) NOT NULL PRIMARY KEY,
-                    [InvestorId] [nvarchar] (50) NOT NULL,
-                    [AdviserId] [nvarchar] (50) NOT NULL,
-                    [FirmId] [nvarchar] (50) NOT NULL,
-                    FOREIGN KEY(InvestorId) REFERENCES Contact(Id),
-                    FOREIGN KEY(AdviserId) REFERENCES Contact(Id),
-                    FOREIGN KEY(FirmId) REFERENCES Firm(Id)
-                    );
-
+[Id] varchar(3) NOT NULL PRIMARY KEY,
+[InvestorId] [nvarchar] (50) NOT NULL,
+[AdviserId] [nvarchar] (50) NOT NULL,
+[FirmId] [nvarchar] (50) NOT NULL,
+FOREIGN KEY(InvestorId) REFERENCES Contact(Id),
+FOREIGN KEY(AdviserId) REFERENCES Contact(Id),
+FOREIGN KEY(FirmId) REFERENCES Firm(Id)
+);
 
 CREATE TABLE [Trade](
-                    [Id] [nvarchar](50) NOT NULL PRIMARY KEY,
-                    [InvestmentId] [nvarchar] (50) NOT NULL,
-                    [Shares] [integer] NOT NULL,
-                    [Price] [integer] NOT NULL,
-                    FOREIGN KEY(InvestmentId) REFERENCES Investment(Id)
-                    );
+[Id] [nvarchar](50) NOT NULL PRIMARY KEY,
+[InvestmentId] [nvarchar] (50) NOT NULL,
+[Shares] [integer] NOT NULL,
+[Price] [integer] NOT NULL,
+FOREIGN KEY(InvestmentId) REFERENCES Investment(Id)
+);
 
 INSERT INTO Investment
 VALUES ('I00001','C00001','C00004', 'F00001'),
@@ -43,7 +41,6 @@ VALUES ('I00001','C00001','C00004', 'F00001'),
        ('I00006','C00003','C00005', 'F00002'),
        ('I00007','C00003','C00005', 'F00002'),
        ('I00008','C00003','C00005', 'F00002');
-
 
 INSERT INTO Contact
 VALUES ('C00001', 'Noella Brady', 'Investor'),
@@ -56,7 +53,6 @@ VALUES ('C00001', 'Noella Brady', 'Investor'),
 INSERT INTO Firm
 VALUES ('F00001', 'Much Money Management'),
        ('F00002', 'Big Bucks Benefits');
-
 
 INSERT INTO Trade
 VALUES ('T00001', 'I00001', 1000, 3.5),
