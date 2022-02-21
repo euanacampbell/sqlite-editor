@@ -1,20 +1,36 @@
 INVESTMENT_QUESTIONS = {
     'Q1': {
-        'question': 'Find all trades for customer with an ID of C00003',
+        'question': 'Find all trades for the investor C00003',
         'query': """SELECT i.id,
-        t.*
+	   i.fullname,
+	   t.shares,
+	   t.price
 FROM contact i
 LEFT JOIN investment inv ON inv.investorid=i.id
 LEFT JOIN trade t ON t.investmentid=inv.id
 WHERE i.id='C00003'"""
     },
     'Q2': {
-        'question': 'Produce the quantity of trades for each customer who has more than 10 shares.',
-        'query': '''SELECT * FROM trade'''
+        'question': 'Find all clients who have more than 15,000 shares',
+        'query': """SELECT i.id,
+	   i.fullname,
+	   SUM(t.shares) [Total Shares]
+FROM contact i
+LEFT JOIN investment inv ON inv.investorid=i.id
+LEFT JOIN trade t ON t.investmentid=inv.id
+GROUP BY i.id, i.fullname
+HAVING SUM(t.shares) > 15000"""
     },
     'Q3': {
-        'question': 'Do something',
-        'query': '''SELECT * FROM contact'''
+        'question': 'Calculate how many shares are advised by each of the firms',
+        'query': """SELECT f.id,
+	   f.firmname,
+	   SUM(t.shares) [Total Shares]
+FROM investment i
+LEFT JOIN firm f ON f.id=i.firmid
+LEFT JOIN trade t ON t.investmentid=i.id
+GROUP BY f.id,
+	   f.firmname"""
     }
 }
 
