@@ -42,7 +42,7 @@ WHERE i.adviserid='C00004'
 """
     },
     'Q5': {
-        'question': 'Calculate how much each investor has spent',
+        'question': 'Calculate how much each investor has invested',
         'query': """SELECT c.id, SUM(t.shares*t.price) [Cost]
 FROM Trade t
 LEFT JOIN investment i ON i.id=t.investmentid

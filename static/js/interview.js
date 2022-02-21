@@ -41,7 +41,11 @@ $(document).ready(function () {
     }}
     
   });
+  
   window.editor.getDoc().setValue('SELECT * FROM Trade')
+
+  var executeButton = document.getElementById("run");
+  executeButton.click();
 
   $("button#refresh").click(function(){
 

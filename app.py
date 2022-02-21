@@ -1,11 +1,14 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, flash
 from sql import SQL
 import json
 import time
 import sqlparse
+import os
+import json
 
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 def convert_to_json(results):
@@ -39,6 +42,19 @@ def interview(sql_type):
 
     code = request.args.get("code")
     code = code.capitalize()
+
+    try:
+        env_list = json.loads(os.environ['ALLOWED_USERS'])
+        if code in env_list:
+            allowed = True
+        else:
+            allowed = False
+    except KeyError:
+        allowed = True
+
+    if not allowed:
+        flash('Invalid code.')
+        return redirect('/')
 
     db_creation_script = sqlparse.format(
         sql.get_table_script(), reindent=False, keyword_case='upper')
@@ -118,3 +134,5 @@ def trigger_error():
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=5000)
+
+    # print(env_list[0])
