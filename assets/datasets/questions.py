@@ -31,6 +31,23 @@ LEFT JOIN firm f ON f.id=i.firmid
 LEFT JOIN trade t ON t.investmentid=i.id
 GROUP BY f.id,
 	   f.firmname"""
+    },
+    'Q4': {
+        'question': 'Produce a list of all unique investor names that are advised by Herbert Johanssen (C00004)',
+        'query': """SELECT DISTINCT c.fullname
+FROM investment i
+LEFT JOIN contact c ON c.id=i.investorid
+LEFT JOIN contact a ON a.id=i.adviserid
+WHERE i.adviserid='C00004'
+"""
+    },
+    'Q5': {
+        'question': 'Calculate how much each investor has spent',
+        'query': """SELECT c.id, SUM(t.shares*t.price) [Cost]
+FROM Trade t
+LEFT JOIN investment i ON i.id=t.investmentid
+LEFT JOIN contact c ON c.id=i.investorid
+GROUP BY c.id"""
     }
 }
 
