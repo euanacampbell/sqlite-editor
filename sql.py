@@ -4,24 +4,38 @@ from tabulate import tabulate
 import json
 import os
 
+from assets.datasets.questions import TRADING_QUESTIONS, INVESTMENT_QUESTIONS
+
 
 class SQL:
 
-    def __init__(self):
-        pass
+    def __init__(self, table_setup='trading'):
+        self.table_setup = table_setup
+
+        self.refresh_tables()
 
     def create_connection(self):
         """ create a database connection to a SQLite database """
         try:
             cwd = os.getcwd()
-            conn = sqlite3.connect(f"{cwd}/assets/main.db")
+            conn = sqlite3.connect(f"{cwd}/assets/{self.table_setup}.db")
             # print(sqlite3.version)
         except sqlite3.Error as e:
             print(e)
 
         return(conn)
 
-    def run_query(self, query:str, sql_print=False):
+    def refresh_tables(self):
+
+        sql_script = self.get_table_script()
+
+        conn = self.create_connection()
+        cursor = conn.cursor()
+        cursor.executescript(sql_script)
+        conn.commit()
+        conn.close()
+
+    def run_query(self, query: str, sql_print=False):
         conn = self.create_connection()
 
         try:
@@ -34,8 +48,8 @@ class SQL:
                 'result': str(e)
             }
             return(response)
-        
-        master=[]
+
+        master = []
         try:
             columns = [d[0] for d in c.description]
             master.append(columns)
@@ -45,70 +59,87 @@ class SQL:
         results = c.fetchall()
 
         for row in results:
-            new_row=[]
+            new_row = []
             for value in row:
                 new_row.append(value)
-            
+
             master.append(new_row)
 
         if sql_print:
             self.print_results(results, columns)
-        
-        conn.close()
 
-        # results = json.dumps(results)
-        # print('dumps')
-        # print(results)
+        conn.close()
 
         response = {
             'error': False,
             'result': master
         }
 
-        return( response )
+        return(response)
 
-    def build_tables(self):
-        
-        
-        query = """CREATE TABLE [Trade](
-                    [TradeId] varchar(3) NOT NULL,
-                    [CustCode] [nvarchar](50) NOT NULL,
-                    [Qty] [int] NULL)"""
-        self.run_query(query)
-
-        query = """CREATE TABLE [Customer](
-                [CustCode] [nvarchar](50) NOT NULL,
-                [CustName] [nvarchar] (50) NOT NULL)"""
-        self.run_query(query)
-
-        query = "insert into Trade values ('001', 'A',3), ('002', 'C',5), ('003', 'C',20), ('004', 'D',7), ('005', 'B',4), ('006', 'A',10), ('007', 'B',5), ('008', 'E',15)"
-        self.run_query(query)
-
-        query = "insert into Customer values ('A','CustA'), ('B','CustB'), ('D','CustD'), ('E','CustE')"
-        self.run_query(query)
-
-    def refresh_tables(self):
-
-        print('RE-BUILDING TABLES')
-        query = "DROP TABLE Trade"
-        self.run_query(query)
-        query = "DROP TABLE Customer"
-        self.run_query(query)
-
-        self.build_tables()
-    
     def print_results(self, results, columns):
-        
+
         print(tabulate(results, headers=columns, tablefmt="pretty"))
 
-if __name__=="__main__":
-    sql = SQL()
+    def get_questions(self):
 
-    sql.build_tables()
-    results = sql.run_query('SELECT * FROM Trade', sql_print=True)
+        if self.table_setup == 'investments':
+            return INVESTMENT_QUESTIONS
+        elif self.table_setup == 'trading':
+            return TRADING_QUESTIONS
+        else:
+            return {}
 
-    results = sql.run_query('SELECT * FROM Customer', sql_print=True)
+    def get_table_info(self):
 
-    results = sql.run_query("SELECT * FROM Trade t LEFT JOIN Customer c ON c.custcode=t.custcode", sql_print=True)
+        tables = self.run_query(
+            "SELECT name FROM sqlite_master WHERE type='table';")['result']
 
-    results = sql.run_query("SELECT c.custcode, c.custname, SUM(t.qty) FROM Customer c LEFT JOIN Trade t ON t.custcode=c.custcode GROUP BY c.custcode, c.custname", sql_print=True)
+        tables.remove(['name'])
+        table_info = {}
+
+        for table in tables:
+
+            table = table[0]
+
+            table_info[table] = self.run_query(
+                f'SELECT * FROM {table}')['result']
+
+        return table_info
+
+    def get_table_script(self):
+
+        cwd = os.getcwd()
+        script = f"{cwd}/assets/datasets/{self.table_setup}.sql"
+
+        with open(script, 'r') as sql_file:
+            sql_script = sql_file.read()
+
+        return sql_script
+
+
+if __name__ == "__main__":
+    sql = SQL(table_setup='investments')
+
+    sql.refresh_tables()
+
+    query = '''SELECT * FROM Investment inv
+        LEFT JOIN Contact i ON i.id=inv.investorid
+        LEFT JOIN Contact a ON a.id=inv.adviserid'''
+
+    query_1 = '''SELECT c.id, COUNT(i.id)
+        FROM Contact c
+        LEFT JOIN Investment i ON i.investorid=c.id
+        WHERE c.ContactType='Investor'
+        GROUP BY c.id'''
+
+    query_2 = '''SELECT c.id, SUM(t.shares)
+        FROM Contact c
+        LEFT JOIN Investment i ON i.investorid=c.id
+        LEFT JOIN Trade t ON t.investmentid=i.id
+        WHERE c.ContactType='Investor'
+        GROUP BY c.id'''
+
+    # print(sql.run_query(query_2, sql_print=True))
+
+    print(sql.get_table_info())

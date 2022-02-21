@@ -2,12 +2,10 @@ from flask import Flask, render_template, redirect, url_for, request
 from sql import SQL
 import json
 import time
+import sqlparse
 
 
 app = Flask(__name__)
-
-sql = SQL()
-sql.refresh_tables()
 
 
 def convert_to_json(results):
@@ -28,20 +26,36 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/interview')
-def interview():
+@app.route('/<sql_type>/interview')
+def interview(sql_type):
+
+    sql = SQL(sql_type)
+    questions = sql.get_questions()
+
+    for question in questions:
+        print(question)
+        questions[question]['answer'] = sql.run_query(
+            questions[question]['query'])
+
     code = request.args.get("code")
     code = code.capitalize()
 
-    return render_template('interview.html', code=code)
+    db_creation_script = sqlparse.format(
+        sql.get_table_script(), reindent=True, keyword_case='upper')
+
+    return render_template('interview.html', code=code, questions=questions, sql_type=sql_type, tables=sql.get_table_info(), creation_script=db_creation_script)
 
 
 @app.route('/query', methods=['GET', 'POST'])
 def query():
 
+    sql = SQL('investments')
+
     response = request.args.getlist('query')[0]
 
     response = sql.run_query(response)
+    print('response')
+    print(response)
 
     if response['error']:
         result = response['result']
@@ -51,9 +65,37 @@ def query():
         return(result)
 
 
-@app.route('/refresh')
-def refresh():
-    sql.refresh_tables()
+@app.route('/questions_info', methods=['GET', 'POST'])
+def questions_info():
+
+    sql = SQL('investments')
+    questions = sql.get_questions()
+
+    for question in questions:
+        # del questions[question]['query']
+        questions[question]['answer'] = sql.run_query(
+            questions[question]['query'])
+
+    return(questions)
+
+
+@app.route('/get_schema', methods=['GET', 'POST'])
+def get_schema():
+
+    sql = SQL('investments')
+    questions = sql.get_questions()
+
+    for question in questions:
+        del questions[question]['query']
+        questions[question]['answer'] = sql.run_query(
+            questions[question]['query'])
+
+    return(questions)
+
+
+@app.route('/<sql_type>/refresh')
+def refresh(sql_type):
+    SQL(sql_type)
 
     return('successfulls refreshed')
 
@@ -65,10 +107,10 @@ def trigger_error():
     return(division_by_zero)
 
 
-@app.errorhandler(404)
-def page_not_found(e):
+# @app.errorhandler(404)
+# def page_not_found(e):
 
-    return redirect(url_for('home'))
+#     return redirect(url_for('home'))
 
 
 # start the server with the 'run()' method

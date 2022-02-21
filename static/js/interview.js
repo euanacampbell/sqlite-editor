@@ -1,8 +1,34 @@
 
-
-
 $(document).ready(function () {
-  
+
+  //GET SQL ANSWERS
+  $.get("/questions_info", {}).done(function (response, statusText, xhr) {
+      // x.innerHTML = "Execute";
+
+      if(xhr.status!=200)
+      {
+        document.getElementById("error-message").innerHTML = response;
+      } else {
+        document.getElementById("error-message").innerHTML = null;
+        document.getElementById("dataresetalert").style.visibility = "hidden";
+
+        
+        console.log(typeof response)
+        console.log(response)
+
+        console.log('loop coming up 4')
+        
+        for (const [key, value] of Object.entries(response)) {
+          console.log(`${key}: ${value}`);
+
+          BuildTable('results_'.concat(key), value['answer']['result'])
+        }
+        
+    }
+    });
+
+
+  //SET UP SQL TEXTAREA
   var mime = 'text/x-mariadb';
   // get mime type
   if (window.location.href.indexOf('mime=') > -1) {
@@ -53,15 +79,22 @@ $(document).ready(function () {
         document.getElementById("error-message").innerHTML = null;
         document.getElementById("dataresetalert").style.visibility = "hidden";
 
-        var table = document.getElementById("results");
+    
+        BuildTable('results_table', response)
+        
+    }
+    });
+  });
 
-        // delete any existing table
-        while(table.rows.length > 0) {
-          table.deleteRow(0);
-        }
+  function BuildTable(table_id, response) {
+      var table = document.getElementById(table_id);
 
-        // build new table
-        for (var key in response) {
+      // delete any existing table
+      while(table.rows.length > 0) {
+        table.deleteRow(0);
+      }
+    
+      for (var key in response) {
           if (response.hasOwnProperty(key)) {
               var row = table.insertRow(-1);
 
@@ -78,8 +111,5 @@ $(document).ready(function () {
               }
           }
       }
-      
-    }
-    });
-  });
+  }
 });
