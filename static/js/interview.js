@@ -45,7 +45,9 @@ $(document).ready(function () {
       users: ["name", "score", "birthDate"],
       countries: ["name", "population", "size"]
     }}
+    
   });
+  window.editor.getDoc().setValue('')
 
   $("button#refresh").click(function(){
     console.log('refreshing tables');
@@ -59,9 +61,6 @@ $(document).ready(function () {
     // var query = $('textarea#query').val();
 
     var query = window.editor.getValue()
-
-    console.log('query')
-    console.log(query)
     
     var x = document.getElementById("run");
     x.innerHTML = "running...";
