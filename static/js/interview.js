@@ -11,15 +11,8 @@ $(document).ready(function () {
       } else {
         document.getElementById("error-message").innerHTML = null;
         document.getElementById("dataresetalert").style.visibility = "hidden";
-
-        
-        console.log(typeof response)
-        console.log(response)
-
-        console.log('loop coming up 4')
         
         for (const [key, value] of Object.entries(response)) {
-          console.log(`${key}: ${value}`);
 
           BuildTable('results_'.concat(key), value['answer']['result'])
         }
@@ -50,7 +43,6 @@ $(document).ready(function () {
   window.editor.getDoc().setValue('')
 
   $("button#refresh").click(function(){
-    console.log('refreshing tables');
 
     $.get("/refresh");
     window.location.reload();
