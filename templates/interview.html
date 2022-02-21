@@ -47,8 +47,10 @@
       <div class="container">
 
         <div class="row">
+          
           <div class="p-3 col-sm-12 col-md-12">
-            <h5 style="font-family: 'Comfortaa', cursive;">Using SQL, create the following outputs</h5>
+
+            <h5 style="font-family: 'Comfortaa', cursive;">SQL</h5>
               <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sqlModal">
                 View DB Creation
               </button> -->
@@ -82,17 +84,17 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    SQL Structure
+                    Initiation Script
                   </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionTable">
                   <div class="accordion-body">
-                    <textarea style="width: 100%; font-family: 'Courier New', monospace;" rows="80">{{creation_script}}</textarea>
+                    <textarea style="width: 100%; font-family: 'Courier New', monospace;" rows="{{ creation_script.split('\n')|length }}">{{creation_script}}</textarea>
                   </div>
                 </div>
               </div>
             </div>
-
+            <h5 style="font-family: 'Comfortaa', cursive;">Create the following outputs</h5>
             <div class="accordion" id="accordionExample">
               {% for question in questions %}
               <div class="accordion-item">
