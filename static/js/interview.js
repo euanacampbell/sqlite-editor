@@ -33,6 +33,7 @@ $(document).ready(function () {
     lineNumbers: true,
     matchBrackets : true,
     autofocus: true,
+    theme: 'base16-light',
     extraKeys: {"Ctrl-Space": "autocomplete"},
     hintOptions: {tables: {
       users: ["name", "score", "birthDate"],
