@@ -31,10 +31,7 @@ LEFT JOIN firm f ON f.id=i.firmid
 LEFT JOIN trade t ON t.investmentid=i.id
 GROUP BY f.id,
 	   f.firmname"""
-    }
-}
-
-""",
+    },
     'Q4': {
         'question': 'Produce a list of all unique investor names that are advised by Herbert Johanssen (C00004)',
         'query': """SELECT DISTINCT c.fullname
@@ -51,7 +48,8 @@ FROM Trade t
 LEFT JOIN investment i ON i.id=t.investmentid
 LEFT JOIN contact c ON c.id=i.investorid
 GROUP BY c.id"""
-    }"""
+    }
+}
 
 TRADING_QUESTIONS = {
     'Q1': {
