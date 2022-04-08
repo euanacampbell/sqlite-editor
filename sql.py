@@ -116,30 +116,3 @@ class SQL:
             sql_script = sql_file.read()
 
         return sql_script
-
-
-if __name__ == "__main__":
-    sql = SQL(table_setup='investments')
-
-    sql.refresh_tables()
-
-    query = '''SELECT * FROM Investment inv
-        LEFT JOIN Contact i ON i.id=inv.investorid
-        LEFT JOIN Contact a ON a.id=inv.adviserid'''
-
-    query_1 = '''SELECT c.id, COUNT(i.id)
-        FROM Contact c
-        LEFT JOIN Investment i ON i.investorid=c.id
-        WHERE c.ContactType='Investor'
-        GROUP BY c.id'''
-
-    query_2 = '''SELECT c.id, SUM(t.shares)
-        FROM Contact c
-        LEFT JOIN Investment i ON i.investorid=c.id
-        LEFT JOIN Trade t ON t.investmentid=i.id
-        WHERE c.ContactType='Investor'
-        GROUP BY c.id'''
-
-    # print(sql.run_query(query_2, sql_print=True))
-
-    print(sql.get_table_info())

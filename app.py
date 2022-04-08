@@ -16,11 +16,9 @@ def convert_to_json(results):
     counter = 1
 
     for row in results:
-        print(row)
         master[counter] = row
         counter += 1
 
-    print(master)
     return(master)
 
 
@@ -36,7 +34,6 @@ def interview(sql_type):
     questions = sql.get_questions()
 
     for question in questions:
-        print(question)
         questions[question]['answer'] = sql.run_query(
             questions[question]['query'])
 
@@ -45,7 +42,7 @@ def interview(sql_type):
 
     try:
         env_list = json.loads(os.environ['ALLOWED_USERS'])
-        if code in env_list:
+        if code.lower() in env_list:
             allowed = True
         else:
             allowed = False
@@ -59,8 +56,6 @@ def interview(sql_type):
     db_creation_script = sqlparse.format(
         sql.get_table_script(), reindent=False, keyword_case='upper')
 
-    print(db_creation_script)
-
     return render_template('interview.html', code=code, questions=questions, sql_type=sql_type, tables=sql.get_table_info(), creation_script=db_creation_script)
 
 
@@ -72,8 +67,6 @@ def query():
     response = request.args.getlist('query')[0]
 
     response = sql.run_query(response)
-    print('response')
-    print(response)
 
     if response['error']:
         result = response['result']

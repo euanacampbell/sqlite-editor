@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
 
+  document.getElementById("change_Q1").style.color = "green";
+
   //GET SQL ANSWERS
   $.get("/questions_info", {}).done(function (response, statusText, xhr) {
       // x.innerHTML = "Execute";
